@@ -27,6 +27,8 @@ void draw() {
   updateCellColor();
 
   showGrid();
+  
+  //saveFrame("frames/#####.png");
 }
 
 void updateCellColor() {
