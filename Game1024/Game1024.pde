@@ -2,18 +2,26 @@ import java.util.Arrays;
 import java.util.Random;
 
 int[][] grid = {
-  {0, 0, 0, 0},
-  {0, 0, 0, 0},
-  {0, 0, 0, 0},
+  {0, 0, 0, 0}, 
+  {0, 0, 0, 0}, 
+  {0, 0, 0, 0}, 
   {0, 0, 0, 0}
 };
 int[][] textSize = new int[4][4];
 color[][] cellColor = new color[4][4];
 Random randomGenerator = new Random();
+PImage leftImg, rightImg, upImg, downImg;
+PImage currImg;
 
 void setup() {
-  for(int i = 1; i <= 11; i++) {println(pow(2, i));}
   size(400, 400);
+
+  leftImg = scaleImg(loadImage("data/left.png"), 0.25);
+  rightImg = scaleImg(loadImage("data/right.png"), 0.25);
+  upImg = scaleImg(loadImage("data/up.png"), 0.25);
+  downImg = scaleImg(loadImage("data/down.png"), 0.25);
+  currImg = rightImg;
+
   addToGrid(4);
 }
 
@@ -27,7 +35,8 @@ void draw() {
   updateCellColor();
 
   showGrid();
-  
+  showOverlay();
+
   //saveFrame("frames/#####.png");
 }
 
@@ -171,6 +180,7 @@ boolean hasGridChanged(int[][] newGrid) {
 }
 
 boolean leftSwipe() {
+  setDir(Dir.LEFT);
   int[][] gridCopy = copyGrid();
   for (int j = 0; j < 4; j++) {
     int[] vals = new int[4];
@@ -188,6 +198,7 @@ boolean leftSwipe() {
 }
 
 boolean rightSwipe() {
+  setDir(Dir.RIGHT);
   int[][] gridCopy = copyGrid();
   for (int j = 0; j < 4; j++) {
     int[] vals = new int[4];
@@ -204,6 +215,7 @@ boolean rightSwipe() {
 }
 
 boolean upSwipe() {
+  setDir(Dir.UP);
   int[][] gridCopy = copyGrid();
   for (int i = 0; i < 4; i++) {
     int[] vals = new int[4];
@@ -220,6 +232,7 @@ boolean upSwipe() {
 }
 
 boolean downSwipe() {
+  setDir(Dir.DOWN);
   int[][] gridCopy = copyGrid();
   for (int i = 0; i < 4; i++) {
     int[] vals = new int[4];
@@ -249,4 +262,12 @@ void keyPressed() {
   if (countEmpty() == 0) {
     print("Game Over!!");
   }
+}
+
+PImage scaleImg(PImage img, float scl) {
+  float w = img.width * scl;
+  float h = img.height * scl;
+  img.resize(int(w), int(h));
+
+  return img;
 }
