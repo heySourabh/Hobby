@@ -24,10 +24,11 @@ void setup() {
 
 void draw() {
   //background(255);
+  noStroke();
   fill(255, 75);
   rect(0, 0, width, height);
-  fill(255, 0, 0);
-  noStroke();
+  fill(255, 0, 0, 120);
+  stroke(255, 0, 0, 0);
   speedx += accelx;
   speedy += accely;
   x += speedx;
@@ -54,10 +55,14 @@ void draw() {
     y = height - ballDia/2;
   }
 
-  //saveFrame("frames/frame_#####.png");
+  saveFrame("frames/frame_#####.png");
+  fill(0);
+  stroke(255, 0, 0);
+  textSize(20);
+  text("Click to Kick!", 10, 30);
+}
 
-  if (abs(speedx * speedy) < 1e-6) {
-    print("Stopped!");
-    noLoop();
-  }
+void mouseClicked() {
+  speedx += random(-10, 10);
+  speedy += random(-10, 10);
 }
