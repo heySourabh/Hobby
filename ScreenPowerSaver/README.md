@@ -8,7 +8,7 @@ It is therefore a waste of power to keep all the screens on.
 
 # How it works
 1. After every short while, the code checks the mouse location and updates idle screen status.
-2. If the mouse is not in a display area for considerable time (more than a minute)
+2. If the mouse is not in a display area for a considerable amount of time (more than a minute)
     - an overlay black background screen fills the idle screen.
 3. If the mouse is moved into an idle display, the overlay screen is removed and the screen idle timer is reset.
 
