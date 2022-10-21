@@ -1,5 +1,5 @@
 # Description
-This program overlays all idle display screens with black window to save power.
+This program overlays all idle displays with black screen to save power.
 This tool saves power by blacking out idle screens when you are using only few of the multiple displays.
 
 # Why?
