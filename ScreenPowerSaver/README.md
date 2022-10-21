@@ -10,7 +10,7 @@ It is therefore a waste of power to keep all the screens on.
 1. After every short while, the code checks the mouse location and updates idle screen status.
 2. If the mouse is not in a display area for considerable time (more than a minute)
     - an overlay black background screen fills the idle screen.
-3. If the mouse moves into an idle display, the overlay screen is removed.
+3. If the mouse is moved into an idle display, the overlay screen is removed and the screen idle timer is reset.
 
 The CPU usage of running this program is negligible. It uses about 0.02% of CPU on my machine (using Java 18). 
 I believe it largely offsets the power cost of keeping multiple screens running all the time.
