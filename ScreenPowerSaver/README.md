@@ -14,6 +14,6 @@ It is therefore a waste of power to keep all the screens on.
 
 The CPU usage of running this program is negligible. It uses about 0.02% of CPU on my machine (using Java 18). 
 I believe it largely offsets the power cost of keeping multiple screens running all the time.
-Use this code if you love using multiple screens but want to save power!
+Use this code if you love using multiple screens but don't want to waste energy!
 
 Developer: Sourabh Bhat (heySourabh@gmail.com)
