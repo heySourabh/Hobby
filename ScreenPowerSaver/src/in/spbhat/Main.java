@@ -41,18 +41,20 @@ public class Main {
                 if (maxIdleSeconds.compareTo(screenIdleTime.get(screen)) < 0) {
                     showBlank(window, screen);
                 } else {
-                    hideBlank(window);
+                    hideBlank(window, screen);
                 }
             }
         }
     }
 
-    private static void hideBlank(Window window) {
+    private static void hideBlank(Window window, GraphicsDevice screen) {
         if (!window.isVisible()) {
             return;
         }
         new Thread(() -> {
             window.setAlwaysOnTop(false);
+            window.setBounds(screen.getDefaultConfiguration().getBounds());
+            screen.setFullScreenWindow(null);
             float stepsSize = 0.1f;
             for (float opacity = 1.0f; opacity > 0.0f; opacity -= stepsSize) {
                 window.setOpacity(opacity);
@@ -68,15 +70,22 @@ public class Main {
             return;
         }
         new Thread(() -> {
-            window.setAlwaysOnTop(true);
-            window.setBounds(screen.getDefaultConfiguration().getBounds());
+            window.setVisible(true);
+            if (window.isAlwaysOnTopSupported()) {
+                window.setAlwaysOnTop(true);
+            }
+
             float stepSize = 0.1f;
             for (float opacity = 0.0f; opacity < 1.0f; opacity += stepSize) {
                 window.setOpacity(opacity);
                 sleepFor(Duration.ofMillis(50));
             }
             window.setOpacity(1.0f);
-            window.setVisible(true);
+            if (screen.isFullScreenSupported()) {
+                screen.setFullScreenWindow(window);
+            }
+            window.setBounds(screen.getDefaultConfiguration().getBounds());
         }).start();
     }
 }
+
