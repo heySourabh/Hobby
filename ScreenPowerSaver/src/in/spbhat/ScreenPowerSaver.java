@@ -53,8 +53,8 @@ public class ScreenPowerSaver {
         }
         new Thread(() -> {
             window.setAlwaysOnTop(false);
-            window.setBounds(screen.getDefaultConfiguration().getBounds());
             screen.setFullScreenWindow(null);
+            window.setBounds(screen.getDefaultConfiguration().getBounds());
             float stepsSize = 0.1f;
             for (float opacity = 1.0f; opacity > 0.0f; opacity -= stepsSize) {
                 window.setOpacity(opacity);
