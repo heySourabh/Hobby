@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static in.spbhat.util.Sleeper.sleepFor;
 
-public class Main {
+public class ScreenPowerSaver {
     public static void main(String[] args) {
         Map<GraphicsDevice, Duration> screenIdleTime = new HashMap<>(3);
         Map<GraphicsDevice, JWindow> screenCoveringWindows = new HashMap<>(3);
