@@ -2,6 +2,7 @@ package in.spbhat;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
