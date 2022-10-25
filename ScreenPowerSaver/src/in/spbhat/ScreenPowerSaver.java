@@ -31,6 +31,7 @@ public class ScreenPowerSaver {
                 screenCoveringWindows.computeIfAbsent(screen, (s) -> {
                     JWindow window = new JWindow(s.getDefaultConfiguration());
                     window.getContentPane().setBackground(Color.BLACK);
+                    window.setIconImage(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB));
                     return window;
                 });
             }
@@ -70,11 +71,12 @@ public class ScreenPowerSaver {
             return;
         }
         new Thread(() -> {
-            window.setVisible(true);
             if (window.isAlwaysOnTopSupported()) {
                 window.setAlwaysOnTop(true);
             }
-
+            window.setBounds(screen.getDefaultConfiguration().getBounds());
+            window.setOpacity(0.0f);
+            window.setVisible(true);
             float stepSize = 0.1f;
             for (float opacity = 0.0f; opacity < 1.0f; opacity += stepSize) {
                 window.setOpacity(opacity);
@@ -84,7 +86,6 @@ public class ScreenPowerSaver {
             if (screen.isFullScreenSupported()) {
                 screen.setFullScreenWindow(window);
             }
-            window.setBounds(screen.getDefaultConfiguration().getBounds());
         }).start();
     }
 }
