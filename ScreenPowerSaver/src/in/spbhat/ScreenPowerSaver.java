@@ -5,27 +5,26 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static in.spbhat.util.Sleeper.sleepFor;
-import static java.time.temporal.ChronoUnit.MILLIS;
-import static java.time.temporal.ChronoUnit.MINUTES;
+import static java.time.temporal.ChronoUnit.*;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 
 public class ScreenPowerSaver {
-    public static void main(String[] args) {
+    private static boolean running = true;
+
+    public static void main(String[] args) throws Exception {
         Map<GraphicsDevice, Duration> screenIdleTime = new HashMap<>(3);
         Map<GraphicsDevice, JWindow> screenCoveringWindows = new HashMap<>(3);
+
         Duration durationBetweenChecks = Duration.of(500, MILLIS);
         Duration maxIdleDuration = Duration.of(2, MINUTES);
-        GraphicsDevice[] screens = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
-        if (screens.length == 1) {
-            String msg = "ScreenPowerSaver: Exiting as only single screen is connected.";
-            System.out.println(msg);
-            JOptionPane.showMessageDialog(null, msg, "Only one screen", WARNING_MESSAGE);
-            System.exit(0);
-        }
-        boolean running = true;
+
+        List<GraphicsDevice> screens = getCurrentScreenDevices();
+        exitOnSingleScreen(screens);
+
         while (running) {
             sleepFor(durationBetweenChecks);
             Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
@@ -38,7 +37,7 @@ public class ScreenPowerSaver {
                     screenIdleTime.computeIfPresent(screen, (s, t) -> t.plus(durationBetweenChecks));
                     screenIdleTime.putIfAbsent(screen, Duration.ZERO);
                 }
-                screenCoveringWindows.computeIfAbsent(screen, (s) -> {
+                screenCoveringWindows.computeIfAbsent(screen, s -> {
                     JWindow window = new JWindow(s.getDefaultConfiguration());
                     window.getContentPane().setBackground(Color.BLACK);
                     window.setIconImage(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB));
@@ -56,6 +55,10 @@ public class ScreenPowerSaver {
                 }
             }
         }
+    }
+
+    private static List<GraphicsDevice> getCurrentScreenDevices() {
+        return List.of(GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices());
     }
 
     private static void hideBlank(Window window, GraphicsDevice screen) {
@@ -97,5 +100,30 @@ public class ScreenPowerSaver {
                 screen.setFullScreenWindow(window);
             }
         }).start();
+    }
+
+    private static void exitOnSingleScreen(List<GraphicsDevice> screens) {
+        if (screens.size() == 1) {
+            String msg = "ScreenPowerSaver: Closing as only single screen is connected.";
+            System.out.println(msg);
+            JOptionPane.showMessageDialog(null, msg, "Only one screen", WARNING_MESSAGE);
+            normalExit();
+        }
+
+        Thread.startVirtualThread(() -> {
+            while (running) {
+                sleepFor(Duration.of(10, SECONDS));
+                List<GraphicsDevice> currentScreens = getCurrentScreenDevices();
+                if (currentScreens.size() <= 1) {
+                    normalExit();
+                }
+            }
+        });
+    }
+
+    private static void normalExit() {
+        System.out.println("Stopping the program.");
+        running = false;
+        System.exit(0);
     }
 }
